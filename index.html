@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wayground - Conteúdos de Matemática</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'],
+          },
+          colors: {
+            wayground: {
+              purple: '#46178F',
+              darkPurple: '#2D0B5A',
+              lightPurple: '#5E22B9',
+              accent: '#8854D0',
+              optionA: '#E21B3C',
+              optionB: '#1368CE',
+              optionC: '#D89E00',
+              optionD: '#26890C',
+              success: '#26890C',
+              error: '#E21B3C',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #2D0B5A;
+      background-image: radial-gradient(#46178F 1.5px, transparent 1.5px), radial-gradient(#46178F 1.5px, #2D0B5A 1.5px);
+      background-size: 60px 60px;
+      background-position: 0 0, 30px 30px;
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      color: #333333;
+    }
+
+    /* Custom 3D Button Shadows mimicking Wayground/Quizizz style */
+    .wg-btn {
+      transition: all 0.15s ease-in-out;
+      position: relative;
+      top: 0;
+    }
+    .wg-btn:hover {
+      transform: translateY(-2px);
+    }
+    .wg-btn:active {
+      transform: translateY(2px);
+    }
+
+    .wg-btn-a {
+      background-color: #E21B3C;
+      box-shadow: 0 5px 0 #A8102A;
+    }
+    .wg-btn-a:active {
+      box-shadow: 0 1px 0 #A8102A;
+    }
+
+    .wg-btn-b {
+      background-color: #1368CE;
+      box-shadow: 0 5px 0 #0B4A96;
+    }
+    .wg-btn-b:active {
+      box-shadow: 0 1px 0 #0B4A96;
+    }
+
+    .wg-btn-c {
+      background-color: #D89E00;
+      box-shadow: 0 5px 0 #9E7400;
+    }
+    .wg-btn-c:active {
+      box-shadow: 0 1px 0 #9E7400;
+    }
+
+    .wg-btn-d {
+      background-color: #26890C;
+      box-shadow: 0 5px 0 #185B07;
+    }
+    .wg-btn-d:active {
+      box-shadow: 0 1px 0 #185B07;
+    }
+
+    .wg-card {
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    /* Hide scrollbar for clean UI in review mode while maintaining scroll */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 8px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+  </style>
+</head>
+
+<body class="flex flex-col min-h-screen text-slate-800 antialiased selection:bg-purple-300 selection:text-purple-900">
+
+  <!-- Header -->
+  <header class="w-full py-4 px-6 flex justify-between items-center bg-wayground-darkPurple/80 backdrop-blur-md border-b border-white/10 sticky top-0 z-50">
+    <div class="flex items-center space-x-3 cursor-pointer" onclick="showScreen('screen-start')">
+      <!-- Wayground Brand Logo -->
+      <div class="w-10 h-10 bg-gradient-to-tr from-purple-500 to-indigo-400 rounded-xl flex items-center justify-center text-white font-black text-2xl shadow-lg transform -rotate-3 hover:rotate-0 transition-transform">
+        W
+      </div>
+      <span class="text-2xl font-black tracking-wider text-white">
+        Way<span class="text-amber-400">ground</span>
+      </span>
+    </div>
+
+    <div class="flex items-center space-x-3">
+      <span class="bg-purple-950/60 text-purple-200 border border-purple-500/30 text-xs px-3 py-1.5 rounded-full font-semibold hidden sm:inline-flex items-center gap-1.5">
+        <i class="fa-solid fa-graduation-cap text-amber-400"></i> Ensino Médio - Brasil
+      </span>
+    </div>
+  </header>
+
+  <!-- Main View Container -->
+  <main class="flex-grow flex items-center justify-center p-4 sm:p-6 md:p-8">
+
+    <!-- 1. TELA INICIAL -->
+    <div id="screen-start" class="w-full max-w-2xl bg-white wg-card p-6 sm:p-10 flex flex-col items-center text-center relative overflow-hidden transition-all duration-300">
+      
+      <!-- Top Decorative Banner -->
+      <div class="w-full h-32 -mt-6 -mx-10 mb-6 bg-gradient-to-r from-purple-700 via-indigo-600 to-purple-800 flex items-center justify-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-20">
+          <i class="fa-solid fa-square-root-variable text-6xl absolute top-2 left-4 text-white"></i>
+          <i class="fa-solid fa-chart-line text-6xl absolute bottom-2 right-6 text-white"></i>
+          <i class="fa-solid fa-shapes text-5xl absolute top-4 right-20 text-white"></i>
+          <i class="fa-solid fa-calculator text-5xl absolute bottom-3 left-24 text-white"></i>
+        </div>
+        <div class="w-20 h-20 bg-white rounded-2xl flex items-center justify-center shadow-xl z-10 border-4 border-amber-400 transform hover:scale-105 transition-transform">
+          <i class="fa-solid fa-calculator text-4xl text-purple-700"></i>
+        </div>
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-3 tracking-tight">
+        Conteúdos de Matemática
+      </h1>
+      
+      <p class="text-slate-600 text-sm sm:text-base mb-6 max-w-lg leading-relaxed">
+        Desafie seus conhecimentos em conceitos essenciais do Ensino Médio: Álgebra, Funções, Geometria, Análise Combinatória e mais.
+      </p>
+
+      <!-- Info Badges -->
+      <div class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8">
+        <span class="bg-purple-100 text-purple-800 text-xs sm:text-sm font-bold px-3.5 py-1.5 rounded-full flex items-center gap-2">
+          <i class="fa-solid fa-list-check text-purple-600"></i> 10 Questões
+        </span>
+        <span class="bg-blue-100 text-blue-800 text-xs sm:text-sm font-bold px-3.5 py-1.5 rounded-full flex items-center gap-2">
+          <i class="fa-solid fa-book-bookmark text-blue-600"></i> Ensino Médio
+        </span>
+        <span class="bg-emerald-100 text-emerald-800 text-xs sm:text-sm font-bold px-3.5 py-1.5 rounded-full flex items-center gap-2">
+          <i class="fa-solid fa-flag text-emerald-600"></i> Matemática Brasil
+        </span>
+      </div>
+
+      <!-- Start Button -->
+      <button onclick="startQuiz()" class="w-full sm:w-auto px-10 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-lg sm:text-xl rounded-2xl shadow-[0_6px_0_#15803d] active:shadow-[0_2px_0_#15803d] active:translate-y-1 transition-all flex items-center justify-center gap-3 group">
+        <span>Começar quiz</span>
+        <i class="fa-solid fa-play group-hover:translate-x-1 transition-transform"></i>
+      </button>
+
+      <div class="mt-6 text-xs text-slate-400 font-medium">
+        <i class="fa-solid fa-volume-high mr-1"></i> Áudio interativo habilitado para respostas
+      </div>
+    </div>
+
+
+    <!-- 2. TELA DE QUIZ -->
+    <div id="screen-quiz" class="w-full max-w-3xl hidden flex-col transition-all duration-300">
+      
+      <!-- Progress Bar & Question Counter Header -->
+      <div class="bg-wayground-darkPurple/90 rounded-2xl p-4 mb-4 text-white flex flex-col gap-2 shadow-lg border border-white/10">
+        <div class="flex justify-between items-center text-sm font-bold">
+          <span id="quiz-question-number" class="text-purple-200">Questão 1 de 10</span>
+          <span id="quiz-topic-badge" class="bg-purple-600/80 text-amber-300 text-xs px-3 py-1 rounded-full font-semibold border border-purple-400/30">
+            Tópico
+          </span>
+        </div>
+        <!-- Progress Bar Bar -->
+        <div class="w-full h-3 bg-purple-950 rounded-full overflow-hidden p-0.5 border border-purple-700/50">
+          <div id="quiz-progress-fill" class="h-full bg-gradient-to-r from-amber-400 to-emerald-400 rounded-full transition-all duration-300" style="width: 10%;"></div>
+        </div>
+      </div>
+
+      <!-- Question Box -->
+      <div class="bg-white wg-card p-6 sm:p-8 mb-4 flex flex-col min-h-[160px] justify-center text-center relative">
+        <h2 id="quiz-question-text" class="text-xl sm:text-2xl font-bold text-slate-800 leading-snug">
+          Carregando enunciado...
+        </h2>
+      </div>
+
+      <!-- 4 Option Buttons Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-4">
+        <!-- Option A -->
+        <button id="opt-btn-0" onclick="selectAnswer(0)" class="wg-btn wg-btn-a p-4 rounded-2xl text-white font-bold flex items-center gap-3 text-left w-full transition-all">
+          <span class="w-9 h-9 rounded-xl bg-black/20 flex items-center justify-center font-extrabold text-lg shrink-0">A</span>
+          <span id="opt-text-0" class="text-base sm:text-lg leading-tight flex-grow">Alternativa A</span>
+          <i id="opt-icon-0" class="fa-solid text-xl opacity-0 transition-opacity"></i>
+        </button>
+
+        <!-- Option B -->
+        <button id="opt-btn-1" onclick="selectAnswer(1)" class="wg-btn wg-btn-b p-4 rounded-2xl text-white font-bold flex items-center gap-3 text-left w-full transition-all">
+          <span class="w-9 h-9 rounded-xl bg-black/20 flex items-center justify-center font-extrabold text-lg shrink-0">B</span>
+          <span id="opt-text-1" class="text-base sm:text-lg leading-tight flex-grow">Alternativa B</span>
+          <i id="opt-icon-1" class="fa-solid text-xl opacity-0 transition-opacity"></i>
+        </button>
+
+        <!-- Option C -->
+        <button id="opt-btn-2" onclick="selectAnswer(2)" class="wg-btn wg-btn-c p-4 rounded-2xl text-white font-bold flex items-center gap-3 text-left w-full transition-all">
+          <span class="w-9 h-9 rounded-xl bg-black/20 flex items-center justify-center font-extrabold text-lg shrink-0">C</span>
+          <span id="opt-text-2" class="text-base sm:text-lg leading-tight flex-grow">Alternativa C</span>
+          <i id="opt-icon-2" class="fa-solid text-xl opacity-0 transition-opacity"></i>
+        </button>
+
+        <!-- Option D -->
+        <button id="opt-btn-3" onclick="selectAnswer(3)" class="wg-btn wg-btn-d p-4 rounded-2xl text-white font-bold flex items-center gap-3 text-left w-full transition-all">
+          <span class="w-9 h-9 rounded-xl bg-black/20 flex items-center justify-center font-extrabold text-lg shrink-0">D</span>
+          <span id="opt-text-3" class="text-base sm:text-lg leading-tight flex-grow">Alternativa D</span>
+          <i id="opt-icon-3" class="fa-solid text-xl opacity-0 transition-opacity"></i>
+        </button>
+      </div>
+
+      <!-- Feedback Area & Next Button -->
+      <div id="quiz-feedback-bar" class="hidden bg-white wg-card p-4 sm:p-5 flex-col sm:flex-row items-center justify-between gap-4 transition-all">
+        <div class="flex items-center gap-3 text-center sm:text-left">
+          <div id="feedback-badge-icon" class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl text-white shrink-0">
+            <i class="fa-solid fa-check"></i>
+          </div>
+          <div>
+            <h3 id="feedback-title" class="font-extrabold text-lg">Você acertou! 🎉</h3>
+            <p id="feedback-sub" class="text-xs sm:text-sm text-slate-500">Excelente raciocínio matemático.</p>
+          </div>
+        </div>
+
+        <button id="btn-next-question" onclick="nextQuestion()" class="w-full sm:w-auto px-8 py-3.5 bg-purple-700 hover:bg-purple-800 text-white font-extrabold text-base rounded-xl shadow-[0_4px_0_#3b0764] active:translate-y-1 transition-all flex items-center justify-center gap-2">
+          <span>Próxima</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+
+    </div>
+
+
+    <!-- 3. TELA FINAL (RESULTADOS) -->
+    <div id="screen-results" class="w-full max-w-xl bg-white wg-card p-6 sm:p-10 hidden flex-col items-center text-center relative transition-all duration-300">
+      
+      <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mb-3">
+        <i class="fa-solid fa-trophy text-3xl text-amber-500"></i>
+      </div>
+
+      <h1 class="text-2xl sm:text-3xl font-black text-slate-900 mb-1">
+        Quiz Concluído!
+      </h1>
+      <p class="text-slate-500 text-sm mb-6">Confira o seu desempenho em Matemática</p>
+
+      <!-- Percentage Big Display -->
+      <div class="mb-6">
+        <span id="results-percentage" class="text-5xl sm:text-6xl font-black text-purple-700 tracking-tight">0%</span>
+        <p id="results-score-text" class="text-slate-600 font-bold text-lg mt-1">Você acertou 0 de 10 questões</p>
+      </div>
+
+      <!-- Progressive Green Bar Box -->
+      <div class="w-full bg-slate-100 p-4 rounded-2xl mb-8 border border-slate-200">
+        <div class="flex justify-between text-xs font-bold text-slate-600 mb-2">
+          <span>Progresso de Acertos</span>
+          <span id="results-progress-label">0%</span>
+        </div>
+        <div class="w-full h-5 bg-slate-200 rounded-full overflow-hidden p-0.5">
+          <div id="results-progress-bar" class="h-full bg-emerald-500 rounded-full transition-all duration-1000 ease-out" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="w-full flex flex-col gap-3">
+        <button onclick="showReviewScreen()" class="w-full py-4 bg-purple-700 hover:bg-purple-800 text-white font-extrabold text-base sm:text-lg rounded-2xl shadow-[0_5px_0_#3b0764] active:translate-y-1 transition-all flex items-center justify-center gap-2">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <span>Revisar conteúdos do quiz</span>
+        </button>
+
+        <button onclick="startQuiz()" class="w-full py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-base rounded-2xl transition-all flex items-center justify-center gap-2">
+          <i class="fa-solid fa-rotate-right"></i>
+          <span>Refazer Quiz</span>
+        </button>
+      </div>
+
+    </div>
+
+
+    <!-- 4. MODO DE REVISÃO -->
+    <div id="screen-review" class="w-full max-w-3xl hidden flex-col transition-all duration-300 my-auto">
+      
+      <!-- Top Sticky Action Bar inside Review -->
+      <div class="bg-wayground-darkPurple/90 rounded-2xl p-4 mb-4 text-white flex justify-between items-center shadow-lg border border-white/10 sticky top-20 z-40 backdrop-blur-md">
+        <div>
+          <h2 class="text-lg font-extrabold flex items-center gap-2">
+            <i class="fa-solid fa-clipboard-check text-amber-400"></i> Revisão de Conteúdos
+          </h2>
+          <p class="text-xs text-purple-200">Role para ver todas as 10 questões e suas respostas</p>
+        </div>
+
+        <button onclick="showScreen('screen-results')" class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white font-bold text-sm rounded-xl transition-all border border-white/20 flex items-center gap-2 shrink-0">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span class="hidden sm:inline">Voltar para Resultados</span>
+          <span class="sm:hidden">Voltar</span>
+        </button>
+      </div>
+
+      <!-- Scrollable Review Items Container -->
+      <div id="review-container" class="space-y-4 max-h-[70vh] overflow-y-auto pr-1 custom-scrollbar">
+        <!-- Dynamic Review Cards generated in JS -->
+      </div>
+
+      <!-- Bottom Return Button -->
+      <div class="mt-6 text-center">
+        <button onclick="showScreen('screen-results')" class="px-8 py-3.5 bg-amber-400 hover:bg-amber-500 text-slate-900 font-extrabold text-base rounded-2xl shadow-[0_4px_0_#b45309] active:translate-y-1 transition-all inline-flex items-center gap-2">
+          <i class="fa-solid fa-chart-pie"></i>
+          <span>Voltar para os resultados</span>
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    /**
+     * 10 Specific Brazilian High School Math Questions Data
+     */
+    const questionsData = [
+      {
+        id: 1,
+        topic: "Equação do 1º Grau",
+        question: "Qual é a solução da equação 3x - 7 = 2x + 5?",
+        options: ["x = 12", "x = 2", "x = -2", "x = 35"],
+        correct: 0,
+        explanation: "3x - 2x = 5 + 7 ⟹ x = 12."
+      },
+      {
+        id: 2,
+        topic: "Equação do 2º Grau",
+        question: "Quais são as raízes da equação x² - 5x + 6 = 0?",
+        options: ["x = -2 e x = -3", "x = 2 e x = 3", "x = 1 e x = 5", "x = 0 e x = 6"],
+        correct: 1,
+        explanation: "Pela fórmula de Bhaskara ou Soma e Produto: S = 5 e P = 6, cujas raízes são x = 2 e x = 3."
+      },
+      {
+        id: 3,
+        topic: "Função do 1º Grau",
+        question: "Dada a função f(x) = 2x + 4, qual é o valor de f(3)?",
+        options: ["8", "12", "10", "14"],
+        correct: 2,
+        explanation: "Substituindo x por 3: f(3) = 2(3) + 4 = 6 + 4 = 10."
+      },
+      {
+        id: 4,
+        topic: "Progressão Aritmética (PA)",
+        question: "Em uma PA cujo primeiro termo a₁ = 4 e a razão r = 3, qual é o 10º termo (a₁₀)?",
+        options: ["31", "34", "30", "28"],
+        correct: 0,
+        explanation: "Fórmula do termo geral: a₁₀ = a₁ + (10 - 1)·r = 4 + 9(3) = 4 + 27 = 31."
+      },
+      {
+        id: 5,
+        topic: "Leitura de Gráficos",
+        question: "Um gráfico de uma função afim passa pelos pontos (0, 2) e (2, 6). Qual é o coeficiente angular (inclinação) dessa reta?",
+        options: ["4", "1", "3", "2"],
+        correct: 3,
+        explanation: "Inclinação m = (y₂ - y₁) / (x₂ - x₁) = (6 - 2) / (2 - 0) = 4 / 2 = 2."
+      },
+      {
+        id: 6,
+        topic: "Área de Figuras Planas",
+        question: "Qual é a área de um triângulo que possui base medindo 8 cm e altura medindo 5 cm?",
+        options: ["40 cm²", "20 cm²", "13 cm²", "30 cm²"],
+        correct: 1,
+        explanation: "Área do triângulo = (base × altura) / 2 = (8 × 5) / 2 = 40 / 2 = 20 cm²."
+      },
+      {
+        id: 7,
+        topic: "Volume de Sólidos Geométricos",
+        question: "Um cilindro circular reto tem raio da base r = 3 cm e altura h = 10 cm. Adotando π = 3,14, qual é o volume do cilindro?",
+        options: ["282,6 cm³", "94,2 cm³", "188,4 cm³", "314,0 cm³"],
+        correct: 0,
+        explanation: "Volume = π · r² · h = 3,14 · 3² · 10 = 3,14 · 9 · 10 = 282,6 cm³."
+      },
+      {
+        id: 8,
+        topic: "Logaritmos",
+        question: "Qual é o valor de log₂(32)?",
+        options: ["16", "4", "5", "6"],
+        correct: 2,
+        explanation: "Como 2⁵ = 32, o logaritmo de 32 na base 2 é igual a 5."
+      },
+      {
+        id: 9,
+        topic: "Permutação Simples",
+        question: "Quantos anagramas diferentes podem ser formados com as letras da palavra 'MATH'?",
+        options: ["12", "24", "16", "120"],
+        correct: 1,
+        explanation: "Palavra com 4 letras distintas: P₄ = 4! = 4 × 3 × 2 × 1 = 24."
+      },
+      {
+        id: 10,
+        topic: "Combinação Simples",
+        question: "De um grupo de 5 estudantes, de quantas maneiras distintas podemos escolher uma comissão formada por 2 estudantes?",
+        options: ["20", "10", "15", "5"],
+        correct: 1,
+        explanation: "C(5, 2) = 5! / [2!(5 - 2)!] = (5 × 4) / 2 = 10."
+      }
+    ];
+
+    /**
+     * Web Audio API Sound Effects (100% reliable, zero external files)
+     */
+    let audioCtx = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    // Success sound: Festive ascending synth chime
+    function playSuccessSound() {
+      try {
+        const ctx = getAudioContext();
+        const now = ctx.currentTime;
+        const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+        
+        notes.forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+          
+          gain.gain.setValueAtTime(0.15, now + idx * 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.08 + 0.3);
+          
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          
+          osc.start(now + idx * 0.08);
+          osc.stop(now + idx * 0.08 + 0.32);
+        });
+      } catch (e) {
+        console.log("Audio playback not supported or blocked", e);
+      }
+    }
+
+    // Error sound: Synthetic realistic cricket chirps
+    function playCricketSound() {
+      try {
+        const ctx = getAudioContext();
+        const now = ctx.currentTime;
+        
+        // 3 chirp bursts
+        [0, 0.2, 0.4].forEach(chirpDelay => {
+          // Each chirp has 4 rapid pulses
+          for (let p = 0; p < 4; p++) {
+            const pulseTime = now + chirpDelay + (p * 0.022);
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(4600 + (p % 2 === 0 ? 120 : -120), pulseTime);
+            
+            gain.gain.setValueAtTime(0.08, pulseTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, pulseTime + 0.016);
+            
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            
+            osc.start(pulseTime);
+            osc.stop(pulseTime + 0.018);
+          }
+        });
+      } catch (e) {
+        console.log("Audio playback not supported or blocked", e);
+      }
+    }
+
+    /**
+     * App State Management
+     */
+    let currentQuestionIndex = 0;
+    let userAnswers = []; // Store selected option index for each question
+    let score = 0;
+    let isAnswered = false;
+
+    // Original Option Classlists
+    const defaultBtnClasses = [
+      "wg-btn-a",
+      "wg-btn-b",
+      "wg-btn-c",
+      "wg-btn-d"
+    ];
+
+    /**
+     * Navigation Switcher
+     */
+    function showScreen(screenId) {
+      document.getElementById('screen-start').classList.add('hidden');
+      document.getElementById('screen-quiz').classList.add('hidden');
+      document.getElementById('screen-results').classList.add('hidden');
+      document.getElementById('screen-review').classList.add('hidden');
+
+      const target = document.getElementById(screenId);
+      target.classList.remove('hidden');
+      if (screenId === 'screen-quiz' || screenId === 'screen-start') {
+        target.classList.add('flex');
+      } else if (screenId === 'screen-results' || screenId === 'screen-review') {
+        target.classList.add('flex');
+      }
+    }
+
+    /**
+     * Start / Reset Quiz
+     */
+    function startQuiz() {
+      currentQuestionIndex = 0;
+      userAnswers = new Array(questionsData.length).fill(null);
+      score = 0;
+      isAnswered = false;
+      showScreen('screen-quiz');
+      loadQuestion(currentQuestionIndex);
+    }
+
+    /**
+     * Render Current Question
+     */
+    function loadQuestion(index) {
+      isAnswered = false;
+      const q = questionsData[index];
+
+      // Update Top Status
+      document.getElementById('quiz-question-number').innerText = `Questão ${index + 1} de ${questionsData.length}`;
+      document.getElementById('quiz-topic-badge').innerText = q.topic;
+      
+      const fillPercent = ((index + 1) / questionsData.length) * 100;
+      document.getElementById('quiz-progress-fill').style.width = `${fillPercent}%`;
+
+      // Update Enunciado
+      document.getElementById('quiz-question-text').innerText = q.question;
+
+      // Hide Feedback Bar
+      document.getElementById('quiz-feedback-bar').classList.add('hidden');
+      document.getElementById('quiz-feedback-bar').classList.remove('flex');
+
+      // Reset Options State
+      for (let i = 0; i < 4; i++) {
+        const btn = document.getElementById(`opt-btn-${i}`);
+        const textSpan = document.getElementById(`opt-text-${i}`);
+        const icon = document.getElementById(`opt-icon-${i}`);
+
+        textSpan.innerText = q.options[i];
+        btn.disabled = false;
+        btn.style.opacity = "1";
+        
+        // Reset classes
+        btn.className = `wg-btn ${defaultBtnClasses[i]} p-4 rounded-2xl text-white font-bold flex items-center gap-3 text-left w-full transition-all cursor-pointer`;
+        
+        icon.className = "fa-solid text-xl opacity-0 transition-opacity";
+      }
+    }
+
+    /**
+     * Option Selection Logic
+     */
+    function selectAnswer(selectedIndex) {
+      if (isAnswered) return;
+      isAnswered = true;
+
+      // Save user answer
+      userAnswers[currentQuestionIndex] = selectedIndex;
+      const q = questionsData[currentQuestionIndex];
+      const isCorrect = selectedIndex === q.correct;
+
+      if (isCorrect) {
+        score++;
+        playSuccessSound();
+      } else {
+        playCricketSound();
+      }
+
+      // Lock buttons & reveal correct/wrong states
+      for (let i = 0; i < 4; i++) {
+        const btn = document.getElementById(`opt-btn-${i}`);
+        const icon = document.getElementById(`opt-icon-${i}`);
+        btn.disabled = true;
+
+        if (i === q.correct) {
+          // Highlight Correct Option in Green
+          btn.className = "wg-btn p-4 rounded-2xl text-white font-bold flex items-center gap-3 text-left w-full transition-all bg-emerald-600 shadow-[0_5px_0_#14532d]";
+          icon.className = "fa-solid fa-circle-check text-2xl text-white opacity-100 ml-auto";
+        } else if (i === selectedIndex && !isCorrect) {
+          // Highlight User Wrong Choice in Red
+          btn.className = "wg-btn p-4 rounded-2xl text-white font-bold flex items-center gap-3 text-left w-full transition-all bg-rose-600 shadow-[0_5px_0_#881337]";
+          icon.className = "fa-solid fa-circle-xmark text-2xl text-white opacity-100 ml-auto";
+        } else {
+          // Dim unused options
+          btn.style.opacity = "0.45";
+        }
+      }
+
+      // Render Bottom Feedback Bar
+      const feedbackBar = document.getElementById('quiz-feedback-bar');
+      const badgeIcon = document.getElementById('feedback-badge-icon');
+      const title = document.getElementById('feedback-title');
+      const sub = document.getElementById('feedback-sub');
+      const nextBtn = document.getElementById('btn-next-question');
+
+      feedbackBar.classList.remove('hidden');
+      feedbackBar.classList.add('flex');
+
+      if (isCorrect) {
+        badgeIcon.className = "w-12 h-12 rounded-2xl flex items-center justify-center text-2xl text-white shrink-0 bg-emerald-500 shadow-md";
+        badgeIcon.innerHTML = `<i class="fa-solid fa-check"></i>`;
+        title.innerText = "Você acertou! 🎉";
+        title.className = "font-extrabold text-lg text-emerald-700";
+        sub.innerText = "Resposta correta! Continue assim.";
+      } else {
+        badgeIcon.className = "w-12 h-12 rounded-2xl flex items-center justify-center text-2xl text-white shrink-0 bg-rose-500 shadow-md";
+        badgeIcon.innerHTML = `<i class="fa-solid fa-bug"></i>`;
+        title.innerText = "Você errou! 🦗";
+        title.className = "font-extrabold text-lg text-rose-700";
+        sub.innerText = `A resposta certa é: ${q.options[q.correct]}`;
+      }
+
+      // Check if last question
+      if (currentQuestionIndex === questionsData.length - 1) {
+        nextBtn.innerHTML = `<span>Ver Resultados</span> <i class="fa-solid fa-trophy"></i>`;
+      } else {
+        nextBtn.innerHTML = `<span>Próxima</span> <i class="fa-solid fa-arrow-right"></i>`;
+      }
+    }
+
+    /**
+     * Advance Question
+     */
+    function nextQuestion() {
+      if (currentQuestionIndex < questionsData.length - 1) {
+        currentQuestionIndex++;
+        loadQuestion(currentQuestionIndex);
+      } else {
+        finishQuiz();
+      }
+    }
+
+    /**
+     * Show Results Screen
+     */
+    function finishQuiz() {
+      showScreen('screen-results');
+
+      const percentage = Math.round((score / questionsData.length) * 100);
+      
+      document.getElementById('results-percentage').innerText = `${percentage}%`;
+      document.getElementById('results-score-text').innerText = `Você acertou ${score} de ${questionsData.length} questões`;
+      document.getElementById('results-progress-label').innerText = `${percentage}% de Acertos`;
+
+      // Animate Green Progress Bar
+      const progressBar = document.getElementById('results-progress-bar');
+      progressBar.style.width = "0%";
+      
+      setTimeout(() => {
+        progressBar.style.width = `${percentage}%`;
+      }, 150);
+    }
+
+    /**
+     * Populate Review Screen
+     */
+    function showReviewScreen() {
+      showScreen('screen-review');
+      const container = document.getElementById('review-container');
+      container.innerHTML = '';
+
+      const letterBadges = ['A', 'B', 'C', 'D'];
+
+      questionsData.forEach((q, qIndex) => {
+        const userChoice = userAnswers[qIndex];
+        const isUserCorrect = userChoice === q.correct;
+
+        // Card Wrapper
+        const card = document.createElement('div');
+        card.className = "bg-white wg-card p-5 sm:p-6 text-left border-2 flex flex-col gap-3 transition-all transform hover:-translate-y-0.5 " + 
+                       (isUserCorrect ? "border-emerald-300" : "border-rose-300");
+
+        // Top Card Status Header
+        const cardHeader = document.createElement('div');
+        cardHeader.className = "flex justify-between items-start gap-2 pb-2 border-b border-slate-100";
+        cardHeader.innerHTML = `
+          <div>
+            <span class="text-xs font-bold text-purple-700 bg-purple-100 px-2.5 py-1 rounded-md">
+              Questão ${qIndex + 1} • ${q.topic}
+            </span>
+          </div>
+          <span class="text-xs font-extrabold px-3 py-1 rounded-full flex items-center gap-1.5 ${
+            isUserCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
+          }">
+            <i class="fa-solid ${isUserCorrect ? 'fa-circle-check text-emerald-600' : 'fa-circle-xmark text-rose-600'}"></i>
+            ${isUserCorrect ? 'Acertou' : 'Errou'}
+          </span>
+        `;
+        card.appendChild(cardHeader);
+
+        // Enunciado
+        const qTitle = document.createElement('p');
+        qTitle.className = "font-bold text-slate-800 text-base sm:text-lg mt-1";
+        qTitle.innerText = q.question;
+        card.appendChild(qTitle);
+
+        // Options List (Centered/Aligned nicely)
+        const optionsList = document.createElement('div');
+        optionsList.className = "grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2";
+
+        q.options.forEach((optText, optIdx) => {
+          const optItem = document.createElement('div');
+          
+          let optionStyle = "bg-slate-50 border-slate-200 text-slate-700";
+          let badgeSymbol = letterBadges[optIdx];
+          let extraIcon = "";
+
+          if (optIdx === q.correct) {
+            // Correct answer style
+            optionStyle = "bg-emerald-500 text-white font-bold shadow-sm border-emerald-600";
+            extraIcon = `<i class="fa-solid fa-check ml-auto text-white"></i>`;
+          } else if (optIdx === userChoice && !isUserCorrect) {
+            // User incorrect choice style
+            optionStyle = "bg-rose-500 text-white font-bold shadow-sm border-rose-600";
+            extraIcon = `<i class="fa-solid fa-xmark ml-auto text-white"></i>`;
+          }
+
+          optItem.className = `p-3 rounded-xl border text-sm flex items-center gap-2.5 transition-all ${optionStyle}`;
+          optItem.innerHTML = `
+            <span class="w-6 h-6 rounded-lg bg-black/15 font-black text-xs flex items-center justify-center shrink-0">
+              ${badgeSymbol}
+            </span>
+            <span class="flex-grow">${optText}</span>
+            ${extraIcon}
+          `;
+          optionsList.appendChild(optItem);
+        });
+
+        card.appendChild(optionsList);
+
+        // Concise Explanation
+        const explanationBox = document.createElement('div');
+        explanationBox.className = "mt-2 p-3 bg-purple-50 rounded-xl text-xs text-purple-900 border border-purple-100 flex items-start gap-2";
+        explanationBox.innerHTML = `
+          <i class="fa-solid fa-lightbulb text-amber-500 text-sm mt-0.5 shrink-0"></i>
+          <div>
+            <strong class="font-bold">Resolução:</strong> ${q.explanation}
+          </div>
+        `;
+        card.appendChild(explanationBox);
+
+        container.appendChild(card);
+      });
+    }
+
+    // Initialize View on Load
+    window.onload = function() {
+      showScreen('screen-start');
+    };
+  </script>
+</body>
+</html>
